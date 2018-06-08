@@ -23,8 +23,6 @@ app = Flask(__name__)
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
-
-
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -40,7 +38,6 @@ parser = WebhookParser(channel_secret)
 def index():
     return 'This is chatbot server.'
 
-@app.route('/bot', methods=['POST'])
 
 @app.route("/callback", methods=['POST'])
 def callback():
