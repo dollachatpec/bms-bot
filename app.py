@@ -1,23 +1,9 @@
-# -*- coding: utf-8 -*-
-
-#  Licensed under the Apache License, Version 2.0 (the "License"); you may
-#  not use this file except in compliance with the License. You may obtain
-#  a copy of the License at
-#
-#       https://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#  License for the specific language governing permissions and limitations
-#  under the License.
-
 from __future__ import unicode_literals
-
 import os
 import sys
+import json
+import requests
 from argparse import ArgumentParser
-
 from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookParser
@@ -29,11 +15,13 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
+# ตรง YOURSECRETKEY ต้องนำมาใส่เองครับจะกล่าวถึงในขั้นตอนต่อๆ ไป
+
 app = Flask(__name__)
-LINE_CHANNEL_ACCESS_TOKEN = "9QSw/U1GISYUyKl/fLaBZuJe/yje+Sg5GnKpmSiNyNC/2i9kx11NwUWJM51NDBj37fy7S0xzbWee9mzAU6lFxKtQGiv6rnaK4bK6Sh2qNmNXBAJtA6TvrZNSgItb5qy8QRhEWPQq6XKwFsQTTlqTQAdB04t89/1O/w1cDnyilFU="
+#LINE_CHANNEL_ACCESS_TOKEN = "9QSw/U1GISYUyKl/fLaBZuJe/yje+Sg5GnKpmSiNyNC/2i9kx11NwUWJM51NDBj37fy7S0xzbWee9mzAU6lFxKtQGiv6rnaK4bK6Sh2qNmNXBAJtA6TvrZNSgItb5qy8QRhEWPQq6XKwFsQTTlqTQAdB04t89/1O/w1cDnyilFU="
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('b2da09aa3ec1769ed1a3858b27629af9', None)
-channel_access_token = os.getenv(LINE_CHANNEL_ACCESS_TOKEN, None)
+channel_access_token = os.getenv("9QSw/U1GISYUyKl/fLaBZuJe/yje+Sg5GnKpmSiNyNC/2i9kx11NwUWJM51NDBj37fy7S0xzbWee9mzAU6lFxKtQGiv6rnaK4bK6Sh2qNmNXBAJtA6TvrZNSgItb5qy8QRhEWPQq6XKwFsQTTlqTQAdB04t89/1O/w1cDnyilFU=", None)
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -44,6 +32,12 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 
+
+@app.route('/')
+def index():
+    return 'This is chatbot server.'
+
+@app.route('/bot', methods=['POST'])
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -73,8 +67,7 @@ def callback():
 
     return 'OK'
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = ArgumentParser(
         usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
     )
