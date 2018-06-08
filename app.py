@@ -14,6 +14,7 @@
 
 import os
 import sys
+import function
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
@@ -58,15 +59,16 @@ def callback():
     except InvalidSignatureError:
         abort(400)
 
-    return 'OK'
+    return 'OK',200
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    if (event.message.text == "Test"):
+    if (event.message.text == "Status"):
+        msgreturn = function.checkstatus()
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=("Hello World !!"))  
+            TextSendMessage(text=msgreturn)  
         )
 
     else:
